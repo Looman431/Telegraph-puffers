@@ -6,3 +6,13 @@ use Illuminate\Support\Facades\Artisan;
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
+
+Artisan::command('menu', function () {
+    /** @var \DefStudio\Telegraph\Models\TelegraphBot $bot */
+    $bot = \DefStudio\Telegraph\Models\TelegraphBot::first();
+
+    dd($bot->registerCommands([
+        'start' => 'Тест бота',
+        'action' => 'Действия???'
+    ])->send());
+});
