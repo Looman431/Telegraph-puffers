@@ -3,6 +3,7 @@
 use DefStudio\Telegraph\Telegraph;
 
 return [
+    'admin_chat_id' => env('TELEGRAM_ADMIN_CHAT_ID'),
     /*
      * Telegram api base url, it can be overridden
      * for self-hosted servers
