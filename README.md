@@ -1,61 +1,73 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Про бота
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Бот предназначен для телеграм чата Puffers Community, по факту он сейчас просто лежит ввиде репозитория на гите, но если вам захочется его задеплоить то снизу инструкция
 
-## About Laravel
+Сам бот построен на фреймворке [Laravel](https://laravel.com/) для PHP при помощи пакета [Telegraph](https://github.com/defstudio/telegraph)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Деплоинг
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Деплоинг будет на самом деле очень долгим, так как все таки писать телеграм боты на ларевеле хоть лично для меня и удобно, но все таки является костылем.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Сама инструкция будет заточена под линукс и работой с докером через [Sail](https://laravel.com/docs/12.x/sail), так как он у меня на так компе работает :)
 
-## Learning Laravel
+## Установка
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+  Ставим сам [ларавель](https://laravel.com/docs/12.x) со всеми зависимостями<br>
+    ```
+   /bin/bash -c "$(curl -fsSL https://php.new/install/linux/8.4)"
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+   #Если композер и все зависимости уже стоят
+  
+   composer global require laravel/installer
+    ```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+  По идеи ставим дальше докер, но тут все в зависимости от того откуда запускаете, если на линуксе то наверное вы разобрались как поставить докер десктоп<br>
+  Но если вы на [WSL](https://learn.microsoft.com/ru-ru/windows/wsl/install) то вам достаточно поставить [Docker Engine](https://docs.docker.com/engine/install/)
 
-## Laravel Sponsors
+## Настройка
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+  Впринципе если вы ставили это все на какую ту машину, то достаточно прописать `./vendor/bin/sail up` внутри проекта и проверить работоспособность<br>
+  ```
+  Если у вас стоит какой то терминал то зайдите в ~/.zshrc` или ~/.bashrc и вставьте
+  
+  alias sail='sh $([ -f sail ] && echo sail || echo vendor/bin/sail)'
+  
+  Теперь можно прописывать просто sail up, sail artisan ...
+  ```
 
-### Premium Partners
+  Но если вы ставили на свою локальную машину то есть прога которая позволяет проксировать порт на определенный домен [NGROK](https://dashboard.ngrok.com/get-started/setup/linux)<br>
+  Регаемся, скачиваем к себе, связываем, и теперь можно проксировать порт к примеру `80`<br>
+  `ngrok http 80`
+  Дальше ngrok выдадит какой-то адрес, который мы уже вставляем в<br> 
+  ```
+  ..\Telegraph-puffers\.env
+  APP_URL=ctrl+v
+  ```
+  
+- Дальше настраиваем уже самого бота<br>
+  Для начала запускаем все миграции
+  ```
+  sail artisan vendor:publish --tag="telegraph-migrations"
+  
+  sail artisan migrate
+  ```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+- Дальше настраиваем самого [бота](https://docs.defstudio.it/telegraph/v1/quickstart/new-bot) через телеграм<br>
+  Получив токена бота добавляем его в приложение<br>
+  `php artisan telegraph:new-bot`
+  Дальше пробуем писать в телеграм и понимаем что ничего нету, я честно говоря сам не разобрался почему так<br>
+  Но как я понимаю из за того что мы каждый раз создаем бота через ngrok и новый адрес после перезапуска вводим, надо каждый раз заного сетать вебхук
+  ```
+  sail artisan telegraph:set-webhook {bot_id}
+  В нашем случии айди бота можно оставить пустым
+  ```
+# Конец
+Ну как-то так, короче обычно ритуал запуска у меня такой:
+- Запускаю ngrok
+- Вставляю новый адресс в .env
+- Запускаю докер
+- Запускаю приложение через `sail up`
+- делаю `sail artisan telegraph:set-webhook`
+- пишу /test в чате с ботом для теста
 
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Скорее всего документация говна и [ты](https://t.me/Atstion) не сможешь по ней запустить приложение, ахахах

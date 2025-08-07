@@ -12,7 +12,7 @@ Artisan::command('menu', function () {
     $bot = \DefStudio\Telegraph\Models\TelegraphBot::first();
 
     dd($bot->registerCommands([
-        'start' => 'Тест бота',
-        'action' => 'Действия???'
+        'test' => 'Тест бота',
+        'action' => 'Основная команда'
     ])->send());
 });
