@@ -13,13 +13,13 @@
 ## Установка
 
   Ставим сам [ларавель](https://laravel.com/docs/12.x) со всеми зависимостями<br>
-    ```
+```
    /bin/bash -c "$(curl -fsSL https://php.new/install/linux/8.4)"
 
    #Если композер и все зависимости уже стоят
   
    composer global require laravel/installer
-    ```
+```
 
   По идеи ставим дальше докер, но тут все в зависимости от того откуда запускаете, если на линуксе то наверное вы разобрались как поставить докер десктоп<br>
   Но если вы на [WSL](https://learn.microsoft.com/ru-ru/windows/wsl/install) то вам достаточно поставить [Docker Engine](https://docs.docker.com/engine/install/)
